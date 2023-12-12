@@ -1,11 +1,7 @@
 import { StatusBar } from "expo-status-bar";
-import { NavigationContainer } from "@react-navigation/native";
-// import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { NavigationContainer, CommonActions } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
-
-import styles from "./styles/appStyles";
-
 import Home from "./pages/Home";
 import Car from "./pages/Car";
 import NewCar from "./pages/NewCar";
@@ -22,10 +18,10 @@ export default function App() {
 
             if (route.name === "Home") {
               iconName = focused ? "home" : "home-outline";
-            } else if (route.name === "Car") {
-              iconName = focused ? "md-car" : "md-car-outline";
             } else if (route.name === "New Car") {
               iconName = focused ? "add-circle" : "add-circle-outline";
+            } else if (route.name === "Car") {
+              iconName = focused ? "car" : "car-outline";
             }
             return <Ionicons name={iconName} size={size} color={color} />;
           },
@@ -33,7 +29,15 @@ export default function App() {
           tabBarInactiveTintColor: "gray",
         })}
       >
-        <Tab.Screen name="Home" component={Home} />
+        <Tab.Screen
+          name="Home"
+          component={Home}
+          listeners={({ navigation, route }) => ({
+            tabPress: (e) => {
+              navigation.navigate ("Home", {refresh: true});
+            },
+          })}
+        />
         <Tab.Screen name="Car" component={Car} />
         <Tab.Screen name="New Car" component={NewCar} />
       </Tab.Navigator>
